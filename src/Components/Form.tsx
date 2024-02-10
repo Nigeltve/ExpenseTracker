@@ -1,26 +1,105 @@
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import { FieldValues, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string().min(3, { message: "Name is not long enough" }),
+  score: z
+    .number({ invalid_type_error: "You have put an incorrect value" })
+    .positive({ message: "Please Put in a valid Score" }),
+  spec: z.enum(
+    [
+      "fury",
+      "frost",
+      "unholy",
+      "havoc",
+      "vengence",
+      "balance",
+      "feral",
+      "guardian",
+      "restoDruid",
+      "augmentation",
+      "devistation",
+      "preservation",
+      "beastMaster",
+      "marksman",
+      "survival",
+      "arcane",
+      "fire",
+      "frost",
+      "brewMaster",
+      "windwalker",
+      "mistweaver",
+      "holyPriest",
+      "protWarrior",
+      "retribution",
+      "discipline",
+      "holyPaladin",
+      "shadow",
+      "assassination",
+      "outlaw",
+      "subtlety",
+      "elemental",
+      "enhancement",
+      "restoShaman",
+      "affliction",
+      "demonology",
+      "destruction",
+      "arms",
+      "fury",
+      "protPally",
+    ],
+    { invalid_type_error: "You have put an incorrect value" }
+  ),
+});
+
+type FormData = z.infer<typeof schema>;
 
 interface Props {
-  onSubmit?: () => void;
+  onSubmit?: (data: FieldValues) => void;
 }
 
 const Form = ({ onSubmit }: Props) => {
-  const [spec, setSpec] = useState("none");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const onSubmitData = (data: FieldValues) => {
+    onSubmit?.(data);
+    reset();
+  };
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmitData)}>
         <div className="mb-3">
           <label htmlFor="Name" className="form-label">
             Name
           </label>
-          <input id="name" type="text" className="form-control" />
+          <input
+            id="name"
+            type="text"
+            className="form-control"
+            {...register("name")}
+          />
+          {errors.name && <p className="text-danger">{errors.name.message}</p>}
         </div>
         <div className="mb-3">
           <label htmlFor="score" className="form-label">
             Score
           </label>
-          <input id="score" type="number" className="form-control" />
+          <input
+            id="score"
+            type="number"
+            className="form-control"
+            {...register("score", { valueAsNumber: true })}
+          />
+          {errors.score && (
+            <p className="text-danger">{errors.score.message}</p>
+          )}
         </div>
         <div className="mb-3">
           <label htmlFor="spec" className="form-label">
@@ -30,8 +109,7 @@ const Form = ({ onSubmit }: Props) => {
             aria-label="Default select example"
             className="form-select"
             id="spec"
-            onChange={(event) => setSpec(event.target.value)}
-            value={spec}
+            {...register("spec")}
           >
             <option value="none">-- None--</option>
             <optgroup label="Death Knight">
@@ -47,7 +125,7 @@ const Form = ({ onSubmit }: Props) => {
               <option value="balance">Balance</option>
               <option value="feral">Feral</option>
               <option value="guardian">Guardian</option>
-              <option value="restoration">Restoration</option>
+              <option value="restoDruid">Restoration</option>
             </optgroup>
             <optgroup label="Evoker">
               <option value="augmentation">Augmentation</option>
@@ -65,43 +143,44 @@ const Form = ({ onSubmit }: Props) => {
               <option value="frost">Frost</option>
             </optgroup>
             <optgroup label="Monk">
-              <option value="brewMaster">brewMaster</option>
+              <option value="brewMaster">BrewMaster</option>
               <option value="windwalker">Windwalker</option>
               <option value="mistweaver">Mistweaver</option>
             </optgroup>
             <optgroup label="Paladin">
-              <option value="Holy">Holy</option>
-              <option value="Protection">Protection</option>
-              <option value="Retribution">Retribution</option>
+              <option value="holyPaladin">Holy</option>
+              <option value="protPaladin">Protection</option>
+              <option value="retribution">Retribution</option>
             </optgroup>
             <optgroup label="Priest">
-              <option value="Discipline">Discipline</option>
-              <option value="Holy">Holy</option>
-              <option value="Shadow">Shadow</option>
+              <option value="discipline">Discipline</option>
+              <option value="holyPriest">Holy</option>
+              <option value="shadow">Shadow</option>
             </optgroup>
             <optgroup label="Rogue">
-              <option value="Assassination">Assassination</option>
-              <option value="Outlaw">Outlaw</option>
-              <option value="Subtlety">Subtlety</option>
+              <option value="assassination">Assassination</option>
+              <option value="outlaw">Outlaw</option>
+              <option value="subtlety">Subtlety</option>
             </optgroup>
             <optgroup label="Shaman">
-              <option value="Elemental">Elemental</option>
-              <option value="Enhancement">Enhancement</option>
-              <option value="Restoration">Restoration</option>
+              <option value="elemental">Elemental</option>
+              <option value="enhancement">Enhancement</option>
+              <option value="restoShaman">Restoration</option>
             </optgroup>
             <optgroup label="Warlock">
-              <option value="Affliction">Affliction</option>
-              <option value="Demonology">Demonology</option>
-              <option value="Destruction">Destruction</option>
+              <option value="affliction">Affliction</option>
+              <option value="demonology">Demonology</option>
+              <option value="destruction">Destruction</option>
             </optgroup>
             <optgroup label="Warrior">
-              <option value="Arms">Arms</option>
-              <option value="Fury">Fury</option>
-              <option value="Protection">Protection</option>
+              <option value="arms">Arms</option>
+              <option value="fury">Fury</option>
+              <option value="protWarrior">Protection</option>
             </optgroup>
           </select>
+          {errors.spec && <p className="text-danger">{errors.spec.message}</p>}
         </div>
-        <button className="btn btn-primary" type="submit" onSubmit={onSubmit}>
+        <button disabled={!isValid} className="btn btn-primary" type="submit">
           Submit
         </button>
       </form>

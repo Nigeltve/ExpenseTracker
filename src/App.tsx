@@ -2,17 +2,26 @@ import { useState } from "react";
 import { Person } from "./SharedInterfaces/SharedInterfaces";
 import Form from "./Components/Form";
 import Table from "./Components/Table/";
+import { FieldValues } from "react-hook-form";
 
 function App() {
-  const [person, setPerson] = useState<Person[]>([
-    { id: 123, name: "JohnDoe1", score: 3456, spec: "asdf" },
-    { id: 234, name: "JohnDoe2", score: 2345, spec: "sdfg" },
-    { id: 345, name: "JohnDoe3", score: 1234, spec: "dfgh" },
-  ]);
+  const [person, setPerson] = useState<Person[]>([]);
 
   return (
     <div>
-      <Form />
+      <Form
+        onSubmit={(data: FieldValues) => {
+          setPerson([
+            ...person,
+            {
+              id: person.length + 1,
+              name: data.name,
+              score: data.score,
+              spec: data.spec,
+            },
+          ]);
+        }}
+      />
       <Table
         items={person}
         onRemove={(id: number) => {
