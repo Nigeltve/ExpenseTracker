@@ -1,7 +1,7 @@
-import { Person } from "../../SharedInterfaces/SharedInterfaces";
+import { Item } from "../SharedInterfaces/SharedInterfaces";
 
 interface Props {
-  items?: Person[];
+  items?: Item[];
   onRemove?: (array: number) => void;
 }
 
@@ -21,17 +21,17 @@ const Table = ({ items, onRemove }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {items?.map((person, index) => (
+            {items?.map((item, index) => (
               <tr key={index}>
-                <td>{person.name}</td>
-                <td>{person.score}</td>
-                <td>{person.spec}</td>
+                <td>{item.name}</td>
+                <td>${item.amount}</td>
+                <td>{item.catagory}</td>
                 <td>
                   <button
                     type="button"
                     className="btn btn-danger"
                     onClick={() => {
-                      onRemove?.(person.id);
+                      onRemove?.(item.id);
                     }}
                   >
                     Remove
@@ -39,6 +39,12 @@ const Table = ({ items, onRemove }: Props) => {
                 </td>
               </tr>
             ))}
+          </tbody>
+          <tbody>
+            <td>Total:</td>
+            <td rowSpan={3}>
+              ${items.reduce((total, item) => total + item.amount, 0)}
+            </td>
           </tbody>
         </table>
       )}

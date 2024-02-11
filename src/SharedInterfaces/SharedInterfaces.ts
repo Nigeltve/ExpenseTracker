@@ -1,6 +1,6 @@
-export interface Person {
+export interface Item {
 	id: number
   name: string;
-  score: number;
-  spec: string;
+  amount: number;
+  catagory: string;
 }

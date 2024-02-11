@@ -1,31 +1,57 @@
 import { useState } from "react";
-import { Person } from "./SharedInterfaces/SharedInterfaces";
-import Form from "./Components/Form";
-import Table from "./Components/Table/";
+import { Item } from "./SharedInterfaces/SharedInterfaces";
 import { FieldValues } from "react-hook-form";
+import AddItemForm from "./Components/AddItemForm";
+import Table from "./Components/Table";
+import CatagoryFilter from "./Components/FilterForm";
 
 function App() {
-  const [person, setPerson] = useState<Person[]>([]);
+  const [filterCatagory, setFilterCatagory] = useState<string>();
+  const [visibleItems, setVisibleItems] = useState<Item[]>([]);
+  const [hiddenItems, setHiddenItems] = useState<Item[]>([]);
 
   return (
     <div>
-      <Form
+      <AddItemForm
         onSubmit={(data: FieldValues) => {
-          setPerson([
-            ...person,
+          setVisibleItems([
+            ...visibleItems,
             {
-              id: person.length + 1,
-              name: data.name,
-              score: data.score,
-              spec: data.spec,
+              id: visibleItems.length + 1,
+              name: data.item,
+              amount: data.amount,
+              catagory: data.catagory,
             },
           ]);
         }}
       />
+      <CatagoryFilter
+        onChangeFilter={(value) => {
+          setFilterCatagory(value);
+
+          if (value === "All") {
+            setVisibleItems([...visibleItems, ...hiddenItems]);
+            setHiddenItems([]);
+          } else {
+            const allItems = [...visibleItems, ...hiddenItems];
+
+            const filteredItems = allItems.filter(
+              (item) => item.catagory === value
+            );
+
+            setVisibleItems(filteredItems);
+
+            const nonMatchingItems = allItems.filter(
+              (item) => item.catagory !== value
+            );
+            setHiddenItems(nonMatchingItems);
+          }
+        }}
+      />
       <Table
-        items={person}
+        items={visibleItems}
         onRemove={(id: number) => {
-          setPerson(person.filter((p) => p.id !== id));
+          setVisibleItems(visibleItems.filter((p) => p.id !== id));
         }}
       />
     </div>
@@ -33,5 +59,3 @@ function App() {
 }
 
 export default App;
-
-//{ name: "Nigel", score: 3313, spec: "MistWeaver" },
