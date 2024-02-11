@@ -6,8 +6,11 @@ import Table from "./Components/Table";
 import CatagoryFilter from "./Components/FilterForm";
 
 function App() {
-  const [filterCatagory, setFilterCatagory] = useState<string>("Any");
+  const [filterCatagory, setFilterCatagory] = useState<string>("");
   const [allExpenses, setAllExpenses] = useState<Item[]>([]);
+
+  console.log("allexpenses...", allExpenses);
+  console.log("Filter Category...", filterCatagory);
 
   const filteredExpensies = filterCatagory
     ? allExpenses.filter((e) => e.catagory === filterCatagory)
