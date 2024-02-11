@@ -7,73 +7,44 @@ import CatagoryFilter from "./Components/FilterForm";
 
 function App() {
   const [filterCatagory, setFilterCatagory] = useState<string>("Any");
-  const [visibleItems, setVisibleItems] = useState<Item[]>([]);
-  const [hiddenItems, setHiddenItems] = useState<Item[]>([]);
+  const [allExpenses, setAllExpenses] = useState<Item[]>([]);
+
+  const filteredExpensies = filterCatagory
+    ? allExpenses.filter((e) => e.catagory === filterCatagory)
+    : allExpenses;
 
   return (
     <div>
       <AddItemForm
         onSubmit={(data: FieldValues) => {
-          if (filterCatagory === "Any") {
-            setVisibleItems([
-              ...visibleItems,
-              {
-                id: visibleItems.length + hiddenItems.length + 1,
-                name: data.item,
-                amount: data.amount,
-                catagory: data.catagory,
-              },
-            ]);
-          } else if (data.catagory == filterCatagory) {
-            setVisibleItems([
-              ...visibleItems,
-              {
-                id: visibleItems.length + hiddenItems.length + 1,
-                name: data.item,
-                amount: data.amount,
-                catagory: data.catagory,
-              },
-            ]);
-          } else {
-            setHiddenItems([
-              ...hiddenItems,
-              {
-                id: visibleItems.length + hiddenItems.length + 1,
-                name: data.item,
-                amount: data.amount,
-                catagory: data.catagory,
-              },
-            ]);
-          }
+          setAllExpenses([
+            ...allExpenses,
+            {
+              id: allExpenses.length + 1,
+              name: data.item,
+              amount: data.amount,
+              catagory: data.catagory,
+            },
+          ]);
         }}
       />
       <CatagoryFilter
-        onChangeFilter={(value) => {
-          setFilterCatagory(value);
-
-          if (value === "All") {
-            setVisibleItems([...visibleItems, ...hiddenItems]);
-            setHiddenItems([]);
-          } else {
-            const allItems = [...visibleItems, ...hiddenItems];
-
-            const filteredItems = allItems.filter(
-              (item) => item.catagory === value
-            );
-
-            setVisibleItems(filteredItems);
-
-            const nonMatchingItems = allItems.filter(
-              (item) => item.catagory !== value
-            );
-            setHiddenItems(nonMatchingItems);
-          }
+        onChangeFilter={(catagory) => {
+          setFilterCatagory(catagory);
         }}
       />
       <Table
-        items={visibleItems}
+        items={filteredExpensies.sort((a, b) => {
+          if (a.catagory < b.catagory) {
+            return -1;
+          }
+          if (a.catagory > b.catagory) {
+            return 1;
+          }
+          return 0;
+        })}
         onRemove={(id: number) => {
-          setVisibleItems(visibleItems.filter((p) => p.id !== id));
+          setAllExpenses(allExpenses.filter((p) => p.id !== id));
         }}
       />
     </div>

@@ -1,5 +1,5 @@
 interface Props {
-  onChangeFilter?: (event: string) => void;
+  onChangeFilter?: (catagory: string) => void;
 }
 
 const CatagoryFilter = ({ onChangeFilter }: Props) => {
@@ -10,12 +10,11 @@ const CatagoryFilter = ({ onChangeFilter }: Props) => {
           Filter Catagory
         </label>
         <select
-          aria-label="Default select example"
           className="form-select"
           id="catagory"
           onChange={(event) => onChangeFilter?.(event.target.value)}
         >
-          <option value="All">All</option>
+          <option value="">All</option>
           <option value="Groceries">Groceries</option>
           <option value="Utility">Utility</option>
           <option value="Entertainment">Entertainment</option>

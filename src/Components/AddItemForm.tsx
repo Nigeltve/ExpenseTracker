@@ -36,7 +36,7 @@ const AddItemForm = ({ onSubmit }: Props) => {
       <form onSubmit={handleSubmit(onSubmitData)}>
         <div className="mb-3">
           <label htmlFor="item" className="form-label">
-            Item Name
+            Expense Description
           </label>
           <input
             id="item"
@@ -62,7 +62,7 @@ const AddItemForm = ({ onSubmit }: Props) => {
         </div>
         <div className="mb-3">
           <label htmlFor="catagory" className="form-label">
-            Catagory
+            Category
           </label>
           <select
             aria-label="Default select example"
@@ -70,7 +70,7 @@ const AddItemForm = ({ onSubmit }: Props) => {
             id="catagory"
             {...register("catagory")}
           >
-            <option value="None">-- None--</option>
+            <option value=""></option>
             <option value="Groceries">Groceries</option>
             <option value="Utility">Utility</option>
             <option value="Entertainment">Entertainment</option>

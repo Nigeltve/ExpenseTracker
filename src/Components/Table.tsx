@@ -14,10 +14,10 @@ const Table = ({ items, onRemove }: Props) => {
         <table className="table table-dark table-hover">
           <thead>
             <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Score</th>
-              <th scope="col">Spec</th>
-              <th scope="col">Action</th>
+              <th scope="col">Expense</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Category</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -29,7 +29,7 @@ const Table = ({ items, onRemove }: Props) => {
                 <td>
                   <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-outline-danger"
                     onClick={() => {
                       onRemove?.(item.id);
                     }}
@@ -39,13 +39,15 @@ const Table = ({ items, onRemove }: Props) => {
                 </td>
               </tr>
             ))}
+          </tbody>
+          <tfoot>
             <tr>
               <td>Total:</td>
-              <td rowSpan={3}>
-                ${items.reduce((total, item) => total + item.amount, 0)}
-              </td>
+              <td>${items.reduce((total, item) => total + item.amount, 0)}</td>
+              <td></td>
+              <td></td>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       )}
     </div>
