@@ -1,5 +1,3 @@
-import { ChangeEvent } from "react";
-
 interface Props {
   onChangeFilter?: (event: string) => void;
 }

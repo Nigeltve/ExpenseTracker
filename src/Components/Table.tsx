@@ -39,12 +39,12 @@ const Table = ({ items, onRemove }: Props) => {
                 </td>
               </tr>
             ))}
-          </tbody>
-          <tbody>
-            <td>Total:</td>
-            <td rowSpan={3}>
-              ${items.reduce((total, item) => total + item.amount, 0)}
-            </td>
+            <tr>
+              <td>Total:</td>
+              <td rowSpan={3}>
+                ${items.reduce((total, item) => total + item.amount, 0)}
+              </td>
+            </tr>
           </tbody>
         </table>
       )}

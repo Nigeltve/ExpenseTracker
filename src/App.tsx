@@ -6,7 +6,7 @@ import Table from "./Components/Table";
 import CatagoryFilter from "./Components/FilterForm";
 
 function App() {
-  const [filterCatagory, setFilterCatagory] = useState<string>();
+  const [filterCatagory, setFilterCatagory] = useState<string>("Any");
   const [visibleItems, setVisibleItems] = useState<Item[]>([]);
   const [hiddenItems, setHiddenItems] = useState<Item[]>([]);
 
@@ -14,15 +14,37 @@ function App() {
     <div>
       <AddItemForm
         onSubmit={(data: FieldValues) => {
-          setVisibleItems([
-            ...visibleItems,
-            {
-              id: visibleItems.length + 1,
-              name: data.item,
-              amount: data.amount,
-              catagory: data.catagory,
-            },
-          ]);
+          if (filterCatagory === "Any") {
+            setVisibleItems([
+              ...visibleItems,
+              {
+                id: visibleItems.length + hiddenItems.length + 1,
+                name: data.item,
+                amount: data.amount,
+                catagory: data.catagory,
+              },
+            ]);
+          } else if (data.catagory == filterCatagory) {
+            setVisibleItems([
+              ...visibleItems,
+              {
+                id: visibleItems.length + hiddenItems.length + 1,
+                name: data.item,
+                amount: data.amount,
+                catagory: data.catagory,
+              },
+            ]);
+          } else {
+            setHiddenItems([
+              ...hiddenItems,
+              {
+                id: visibleItems.length + hiddenItems.length + 1,
+                name: data.item,
+                amount: data.amount,
+                catagory: data.catagory,
+              },
+            ]);
+          }
         }}
       />
       <CatagoryFilter
